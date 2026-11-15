@@ -1,0 +1,42 @@
+name: CI
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: aiq
+          POSTGRES_PASSWORD: test_pw
+          POSTGRES_DB: aiq_test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -r requirements.txt
+      - name: Generate migration & apply on SQLite
+        env:
+          DATABASE_URL: sqlite+aiosqlite:///./ci.db
+        run: |
+          alembic revision --autogenerate -m "initial schema"
+          alembic upgrade head
+      - name: pytest (SQLite)
+        env:
+          DATABASE_URL: sqlite+aiosqlite:///./ci.db
+        run: pytest -q
+      - name: PostgreSQL real connection + migrations + tests
+        env:
+          DATABASE_URL: postgresql+asyncpg://aiq:test_pw@localhost:5432/aiq_test
+          TEST_DATABASE_URL: postgresql+asyncpg://aiq:test_pw@localhost:5432/aiq_test
+        run: |
+          python scripts/check_db.py
+          alembic upgrade head
+          pytest -q -k postgres

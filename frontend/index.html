@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>AIQ — Your Private AI</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ===== LOGIN ===== -->
+<div id="login-screen" class="screen active">
+  <div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
+  <div class="login-center">
+    <div class="mark">
+      <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+        <rect x="6" y="14" width="52" height="40" rx="14" fill="url(#mg)"/>
+        <rect x="6" y="14" width="52" height="40" rx="14" fill="url(#sheen)" opacity=".5"/>
+        <circle cx="24" cy="32" r="6" fill="#fff"/><circle cx="40" cy="32" r="6" fill="#fff"/>
+        <circle cx="24" cy="32" r="3" fill="#0B0B12"/><circle cx="40" cy="32" r="3" fill="#0B0B12"/>
+        <rect x="26" y="44" width="12" height="3" rx="1.5" fill="#fff" opacity=".85"/>
+        <circle cx="32" cy="8" r="4" fill="url(#mg)"/>
+        <defs>
+          <linearGradient id="mg" x1="0" y1="0" x2="64" y2="64">
+            <stop stop-color="#A78BFA"/><stop offset=".5" stop-color="#6366F1"/><stop offset="1" stop-color="#22D3EE"/>
+          </linearGradient>
+          <linearGradient id="sheen" x1="0" y1="0" x2="0" y2="1">
+            <stop stop-color="#fff" stop-opacity=".35"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+    <h1 class="lg-title">AIQ</h1>
+    <p class="lg-sub">نموذجك الخاص. وكلاؤك الخاص. بياناتك ملكك.</p>
+    <form id="login-form" class="lg-box">
+      <input type="text" id="username" placeholder="اسم المستخدم" required>
+      <input type="password" id="password" placeholder="كلمة المرور" required>
+      <button type="submit" class="lg-btn">
+        <span>ابدأ</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </button>
+      <div id="login-error" class="lg-err"></div>
+    </form>
+  </div>
+</div>
+
+<!-- ===== APP ===== -->
+<div id="main-app" class="screen">
+  <!-- SIDEBAR -->
+  <aside class="side">
+    <div class="side-brand">
+      <div class="sb-mark">AIQ</div>
+      <div class="sb-txt">Control Center</div>
+    </div>
+    <nav class="side-nav">
+      <button class="sn active" data-view="chat">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <span>المحادثة</span>
+      </button>
+      <button class="sn" data-view="agents">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="8" width="16" height="12" rx="3"/><circle cx="9.5" cy="13" r="1.2" fill="currentColor"/><circle cx="14.5" cy="13" r="1.2" fill="currentColor"/><path d="M12 4v4"/></svg>
+        <span>الوكلاء</span>
+      </button>
+      <button class="sn" data-view="tasks">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        <span>متابعة العمل</span>
+      </button>
+      <button class="sn" data-view="studio">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span>الاستوديو</span>
+        <em class="pill">صور · فيديو</em>
+      </button>
+      <button class="sn" data-view="approvals">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>
+        <span>الموافقات</span>
+        <em class="pill red" id="nav-pending">0</em>
+      </button>
+      <button class="sn" data-view="audit">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg>
+        <span>سجل التدقيق</span>
+      </button>
+    </nav>
+    <div class="side-foot">
+      <div class="sf-user"><span class="sf-dot"></span><span id="user-name">المؤسس</span></div>
+      <button id="logout-btn" class="sf-out">خروج</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <!-- ===== CHAT ===== -->
+    <section id="view-chat" class="view active">
+      <div class="chat-head">
+        <div class="ch-title">
+          <span class="ch-live"></span>
+          <h2>مساعدك الخاص</h2>
+        </div>
+        <div class="ch-agents">
+          <span class="ag-chip">Research</span><span class="ag-chip">Content</span><span class="ag-chip">Media</span><span class="ag-chip">Commerce</span>
+        </div>
+      </div>
+
+      <div id="chat-scroll" class="chat-scroll">
+        <div id="chat-hero" class="hero">
+          <div class="hero-glow"></div>
+          <h1>مرحباً، أنا <span class="gt">AIQ</span></h1>
+          <p>نموذج ذكاء اصطناعي مملوك لك بالكامل. وكلاؤك يعملون ضمن صلاحيات محددة، وكل إجراء حساس يحتاج موافقتك.</p>
+          <div class="sugs">
+            <button class="sug" data-q="ابحث عن أحدث اتجاهات الذكاء الاصطناعي 2026">🔎 <b>ابحث</b><span>اتجاهات AI 2026</span></button>
+            <button class="sug" data-q="اكتب مقالاً عن إدارة وكلاء الذكاء الاصطناعي">✍️ <b>اكتب</b><span>مقال عن إدارة الوكلاء</span></button>
+            <button class="sug" data-q="ولّد صورة غلاف احترافية لمشروعي">🎨 <b>استوديو</b><span>غلاف احترافي</span></button>
+            <button class="sug" data-q="خطط لحملة affiliate تسويقية بدون مخزون">📋 <b>خطة عمل</b><span>حملة affiliate</span></button>
+          </div>
+        </div>
+        <div id="chat-msgs"></div>
+      </div>
+
+      <div class="composer">
+        <div class="comp-box">
+          <textarea id="chat-input" rows="1" placeholder="اسأل AIQ أي شيء…"></textarea>
+          <button id="send-btn" class="comp-send">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+          </button>
+        </div>
+        <p class="comp-note">الوكلاء يعملون ضمن صلاحياتك · الإجراءات الحساسة تتطلب موافقتك</p>
+      </div>
+    </section>
+
+    <!-- ===== AGENTS ===== -->
+    <section id="view-agents" class="view">
+      <div class="v-head"><h1>الوكلاء</h1><p>الفريق الرقمي الخاص بك — كل وكيل بمهارات وصلاحيات محددة</p></div>
+      <div class="ag-grid" id="agents-grid"></div>
+    </section>
+
+    <!-- ===== TASKS (KANBAN) ===== -->
+    <section id="view-tasks" class="view">
+      <div class="v-head"><h1>متابعة العمل</h1><p>تطبيقات · مواقع · مهام — حالة التنفيذ اللحظية</p></div>
+      <div class="kanban">
+        <div class="kcol" data-state="queued"><div class="kh">🟣 في الانتظار</div><div class="kcards" id="k-queued"></div></div>
+        <div class="kcol" data-state="running"><div class="kh">🔵 قيد التنفيذ</div><div class="kcards" id="k-running"></div></div>
+        <div class="kcol" data-state="awaiting_approval"><div class="kh">🟠 بانتظار موافقتك</div><div class="kcards" id="k-await"></div></div>
+        <div class="kcol" data-state="succeeded"><div class="kh">🟢 مكتمل</div><div class="kcards" id="k-done"></div></div>
+      </div>
+    </section>
+
+    <!-- ===== STUDIO ===== -->
+    <section id="view-studio" class="view">
+      <div class="v-head">
+        <div><h1>الاستوديو</h1><p>صور وفيديوهات مولدة — عدّل، أعد التوليد، صدّر</p></div>
+        <button class="btn-gen" id="gen-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+          توليد جديد
+        </button>
+      </div>
+      <div class="st-filters">
+        <button class="sf active" data-f="all">الكل</button>
+        <button class="sf" data-f="image">صور</button>
+        <button class="sf" data-f="video">فيديو</button>
+      </div>
+      <div class="st-grid" id="st-grid"></div>
+    </section>
+
+    <!-- ===== APPROVALS ===== -->
+    <section id="view-approvals" class="view">
+      <div class="v-head"><h1>بوابة الموافقات</h1><p>لا يُنفَّذ أي إجراء حساس دون قرارك</p></div>
+      <div id="ap-list" class="ap-list"></div>
+    </section>
+
+    <!-- ===== AUDIT ===== -->
+    <section id="view-audit" class="view">
+      <div class="v-head"><h1>سجل التدقيق</h1><p>كل حدث مسجّل — لا استثناءات</p></div>
+      <div class="au-list" id="au-list"></div>
+    </section>
+  </div>
+</div>
+
+<!-- STUDIO MODAL -->
+<div id="gen-modal" class="modal">
+  <div class="md-card">
+    <div class="md-head"><h3>توليد أصل جديد</h3><button class="md-x" id="gen-close">✕</button></div>
+    <div class="md-body">
+      <label>النوع</label>
+      <div class="kind-sw"><button class="ks active" data-k="image">🖼️ صورة</button><button class="ks" data-k="video">🎬 فيديو</button></div>
+      <label>الوصف (Prompt)</label>
+      <textarea id="gen-prompt" rows="3" placeholder="مثال: غلاف تقني بتدرجات بنفسجي وسماوي، أسلوب مستقبلي"></textarea>
+      <button class="md-go" id="gen-go">توليد ✦</button>
+    </div>
+  </div>
+</div>
+
+<!-- ASSET EDIT MODAL -->
+<div id="edit-modal" class="modal">
+  <div class="md-card wide">
+    <div class="md-head"><h3>تعديل الأصل</h3><button class="md-x" id="edit-close">✕</button></div>
+    <div class="md-body edit-body">
+      <div class="ed-preview"><img id="ed-img" src="" alt=""></div>
+      <div class="ed-tools">
+        <label>تعديل الوصف</label>
+        <textarea id="ed-prompt" rows="3"></textarea>
+        <div class="ed-actions">
+          <button class="md-go" id="ed-save">حفظ التعديل</button>
+          <button class="md-alt" id="ed-regen">↻ إعادة التوليد</button>
+          <a class="md-alt" id="ed-dl" download="aiq-asset.svg">⬇ تنزيل</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
