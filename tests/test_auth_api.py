@@ -130,6 +130,30 @@ def test_reviewer_can_decide_200(client):
     assert r.status_code == 200
 
 
+
+def test_reviewer_identity_comes_from_token_not_request_body(client):
+    c, S = client
+    aid = approval_id(S)
+    t = login(c, "rev", REVIEWER_PW).json()["access_token"]
+    r = c.post(
+        f"/review/{aid}/decide",
+        headers=auth(t),
+        json={
+            "decision": "approve",
+            "reviewer_id": "forged-founder-id",
+            "note": "identity must be token-derived",
+        },
+    )
+    assert r.status_code == 200
+
+    async def _q():
+        async with S() as s:
+            approval = await s.get(Approval, aid)
+            return approval.decided_by
+
+    assert asyncio.run(_q()) == "rev"
+
+
 def test_password_stored_hashed(client):
     c, S = client
 
