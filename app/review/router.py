@@ -35,8 +35,10 @@ async def history(session: AsyncSession = Depends(get_session)):
         .order_by(Approval.decided_at.desc())
     )).scalars().all()
     return [
-        {"approval_id": r.id, "task_id": r.task_id, "status": r.status,
-         "decided_by": r.decided_by, "note": r.decision_note,
+        {"approval_id": r.id, "task_id": r.task_id, "action": r.action,
+         "status": r.status, "decided_by": r.decided_by,
+         "note": r.decision_note,
+         "created_at": r.created_at.isoformat() if r.created_at else None,
          "decided_at": r.decided_at.isoformat() if r.decided_at else None}
         for r in rows
     ]
