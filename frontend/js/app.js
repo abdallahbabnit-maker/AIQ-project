@@ -145,10 +145,13 @@ async function sendMessage() {
     // إضافة رسالة المستخدم
     const userMsg = document.createElement('div');
     userMsg.className = 'msg user';
-    userMsg.innerHTML = `
-        <div class="av">أنا</div>
-        <div class="bubble">${text}</div>
-    `;
+    const userAvatar = document.createElement('div');
+    userAvatar.className = 'av';
+    userAvatar.textContent = 'أنا';
+    const userBubble = document.createElement('div');
+    userBubble.className = 'bubble';
+    userBubble.textContent = text;
+    userMsg.append(userAvatar, userBubble);
     msgsDiv.appendChild(userMsg);
     
     input.value = '';
@@ -268,7 +271,6 @@ window.decideApproval = async (id, decision) => {
             },
             body: JSON.stringify({
                 decision: decision,
-                reviewer_id: localStorage.getItem('aiq_user') || 'founder',
                 note: note
             })
         });
