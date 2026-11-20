@@ -25,6 +25,13 @@ app.add_middleware(
 FRONTEND_DIR = Path(__file__).resolve().parent.parent / "frontend"
 FRONTEND_ROOT = FRONTEND_DIR.resolve()
 
+# Register API routes before the catch-all static-file route.
+app.include_router(health_router)
+app.include_router(auth_router)
+app.include_router(chat_router, dependencies=[Depends(require_user)])
+app.include_router(studio_router)
+app.include_router(review_router, dependencies=[Depends(require_user)])
+
 
 @app.get("/")
 async def serve_frontend():
@@ -42,10 +49,3 @@ async def serve_static(file_path: str):
     if requested_path.is_file():
         return FileResponse(requested_path)
     return JSONResponse({"error": "not found"}, status_code=404)
-
-
-app.include_router(health_router)
-app.include_router(auth_router)
-app.include_router(chat_router, dependencies=[Depends(require_user)])
-app.include_router(studio_router)
-app.include_router(review_router, dependencies=[Depends(require_user)])
